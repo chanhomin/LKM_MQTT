@@ -1,0 +1,17 @@
+{
+  "name": "LKM_MQTT",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "server": "ts-node server/app.ts",
+    "client": "ts-node client/app.ts"
+  },
+  "dependencies": {
+    "@types/mosca": "^2.8.1",
+    "mosca": "^2.8.3",
+    "mqtt": "^3.0.0",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.3"
+  }
+}
