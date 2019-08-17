@@ -4,8 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "server": "ts-node server/app.ts",
-    "client": "ts-node client/app.ts"
+    "server": "ts-node src/server.ts",
+    "client": "ts-node src/client.ts"
   },
   "dependencies": {
     "@types/mosca": "^2.8.1",
