@@ -7,6 +7,11 @@
   resolved "https://registry.yarnpkg.com/@types/mosca/-/mosca-2.8.1.tgz#b24c7e082d2799d84e710c5f813a0d83dd70a4c9"
   integrity sha512-nAdE2/ixg25clVx+3u3ZlpJFg2VyR/+8Zcy+REOrbobfhOFxeeH5kflyPP1UAgboYymCfv5SY/T4Cx6qge3Csw==
 
+"@types/node@^12.7.2":
+  version "12.7.2"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.7.2.tgz#c4e63af5e8823ce9cc3f0b34f7b998c2171f0c44"
+  integrity sha512-dyYO+f6ihZEtNPDcWNR1fkoTDf3zAK3lAABDze3mz6POyIercH0lEUawUFXlG8xaQZmm1yEBON/4TsYv/laDYg==
+
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"

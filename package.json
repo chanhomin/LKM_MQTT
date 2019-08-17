@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@types/mosca": "^2.8.1",
+    "@types/node": "^12.7.2",
     "mosca": "^2.8.3",
     "mqtt": "^3.0.0",
     "ts-node": "^8.3.0",
