@@ -50,3 +50,4 @@ manage editGroupPermission <groupName>
 ```
 <allow|disallow> <all|publish|subscribe> <topic>
 ```
+note: first line will be affected first

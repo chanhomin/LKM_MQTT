@@ -33,8 +33,7 @@ let authenticate = function(client: any, username: any, password: any, callback:
   });
 }
 
-// In this case the client authorized as alice can publish to /users/alice taking
-// the username from the topic and verifing it is the same of the authorized user
+// check permission from db
 let authorizePublish = function(client: any, topic: any, payload: any, callback: any) {
   console.log('publish request', client.user, topic);
 
@@ -71,8 +70,7 @@ let authorizePublish = function(client: any, topic: any, payload: any, callback:
   });
 }
 
-// In this case the client authorized as alice can subscribe to /users/alice taking
-// the username from the topic and verifing it is the same of the authorized user
+// check permission from db
 let authorizeSubscribe = function(client: any, topic: any, callback: any) {
   console.log('subscribe request', client.user, topic);
 
