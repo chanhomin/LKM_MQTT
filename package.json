@@ -5,13 +5,16 @@
   "license": "MIT",
   "scripts": {
     "server": "ts-node src/server.ts",
-    "client": "ts-node src/client.ts"
+    "client": "ts-node src/client.ts",
+    "manage": "ts-node src/manage.ts"
   },
   "dependencies": {
     "@types/mosca": "^2.8.1",
     "@types/node": "^12.7.2",
+    "@types/sqlite3": "^3.1.5",
     "mosca": "^2.8.3",
     "mqtt": "^3.0.0",
+    "sqlite3": "^4.1.0",
     "ts-node": "^8.3.0",
     "typescript": "^3.5.3"
   }

@@ -1,4 +1,5 @@
 import * as mosca from 'mosca';
+let utils = require('./utils.ts');
 
 let SECURE_KEY = __dirname + '/../certificates/server.key';
 let SECURE_CERT = __dirname + '/../certificates/server.crt';
@@ -53,7 +54,7 @@ server.on('published', function(packet: any, client: any) {
   // console.log('raw packet:', packet)
   console.log('on topic \'' + packet.topic + '\', payload:', packet.payload);
 
-  let splitTopic = packet.topic.split('/')
+  let splitTopic = packet.topic.split('/');
 
   if (splitTopic[0] === 'general' && splitTopic[2] === 'echo' && splitTopic[3] === 'ping') {
     console.log('ping message:', packet.payload.toString());
