@@ -1,17 +1,7 @@
 import * as mosca from 'mosca';
 
-<<<<<<< HEAD
-let settings = {
-  port: 1883,
-  persistence: mosca.persistence.Memory
-};
-
-var server = new mosca.Server(settings, function() {
-  console.log('Mosca server is up and running');
-});
-=======
-let SECURE_KEY = __dirname + '/../server.key';
-let SECURE_CERT = __dirname + '/../server.crt';
+let SECURE_KEY = __dirname + '/../certificates/server.key';
+let SECURE_CERT = __dirname + '/../certificates/server.crt';
 
 let settings = {
   port: 1883,
@@ -50,7 +40,6 @@ server.on('ready', function() {
   server.authorizePublish = authorizePublish;
   server.authorizeSubscribe = authorizeSubscribe;
 });
->>>>>>> dd9c7e9c822188ec1f5942ec65d7df73622f6be8
 server.on('clientConnected', function(client: any) {
   console.log('client connected', client.id)
 });
@@ -58,25 +47,19 @@ server.on("clientDisconnected", function(client: any) {
   console.log('client disconnected', client.id)
 });
 
-<<<<<<< HEAD
-server.on('published', function(packet, client) {
-=======
 server.on('published', function(packet: any, client: any) {
->>>>>>> dd9c7e9c822188ec1f5942ec65d7df73622f6be8
   if (packet.topic.indexOf('$SYS') === 0) return;
 
   // console.log('raw packet:', packet)
   console.log('on topic \'' + packet.topic + '\', payload:', packet.payload);
 
-  if (packet.topic.indexOf('general/echo/ping') === 0) {
+  let splitTopic = packet.topic.split('/')
+
+  if (splitTopic[0] === 'general' && splitTopic[2] === 'echo' && splitTopic[3] === 'ping') {
     console.log('ping message:', packet.payload.toString());
 
-<<<<<<< HEAD
-    var newPacket = {
-=======
     let newPacket = {
->>>>>>> dd9c7e9c822188ec1f5942ec65d7df73622f6be8
-      topic: 'general/echo/pong',
+      topic: 'general/' + splitTopic[1] + '/echo/pong',
       payload: packet.payload,
       retain: packet.retain,
       qos: packet.qos

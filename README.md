@@ -1,8 +1,6 @@
 # LKM_MQTT
 
 mqtt server/client for LKM IoT Authentication System
-<<<<<<< HEAD
-=======
 
 ### TLS create query
 ```
@@ -15,4 +13,3 @@ $ openssl genrsa -out client.key
 $ openssl req -new -key client.key -out client.csr
 $ openssl x509 -req -in client.csr -days 3650 -sha1 -CAcreateserial -CA root.crt -CAkey server.cakey.pem -out client.crt
 ```
->>>>>>> dd9c7e9c822188ec1f5942ec65d7df73622f6be8
