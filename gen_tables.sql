@@ -12,8 +12,8 @@ CREATE TABLE groups (
 );
 
 CREATE TABLE groupMembers (
-	userId  INTEGER,
-	groupId INTEGER,
+	userId  INTEGER NOT NULL,
+	groupId INTEGER NOT NULL,
 	PRIMARY KEY (userId, groupId),
 	FOREIGN KEY (userId)  REFERENCES users  (id) ON DELETE CASCADE,
 	FOREIGN KEY (groupId) REFERENCES groups (id) ON DELETE CASCADE

@@ -1,39 +1,68 @@
+import * as fs from 'fs';
 import * as sqlite3 from 'sqlite3';
+import * as readline from 'readline';
+import * as child_process from 'child_process';
 
 let db = new sqlite3.Database('db.sqlite3');
 
-if (process.argv[2] === 'help')
+if (process.argv[2] === 'help') {
   help();
-else if (process.argv[2] === 'addUser')
-  addUser(process.argv[3]);
-else if (process.argv[2] === 'addGroup')
-  addGroup(process.argv[3]);
-else if (process.argv[2] === 'delUser')
-  delUser(process.argv[3]);
-else if (process.argv[2] === 'delGroup')
-  delGroup(process.argv[3]);
-else if (process.argv[2] === 'addMember')
-  addMember(process.argv[3], process.argv[4]);
-else if (process.argv[2] === 'delMember')
-  delMember(process.argv[3], process.argv[4]);
-else if (process.argv[2] === 'listUsers')
+} else if (process.argv[2] === 'addUser') {
+  if (process.argv[3]) {
+    addUser(process.argv[3]);
+  } else { help(); }
+} else if (process.argv[2] === 'addGroup') {
+  if(process.argv[3]) {
+    addGroup(process.argv[3]);
+  } else { help(); }
+} else if (process.argv[2] === 'delUser') {
+  if(process.argv[3]) {
+    delUser(process.argv[3]);
+  } else { help(); }
+} else if (process.argv[2] === 'delGroup') {
+  if(process.argv[3]) {
+    delGroup(process.argv[3]);
+  } else { help(); }
+} else if (process.argv[2] === 'addMember') {
+  if(process.argv[3] && process.argv[4]) {
+    addMember(process.argv[3], process.argv[4]);
+  } else { help(); }
+} else if (process.argv[2] === 'delMember') {
+  if(process.argv[3] && process.argv[4]) {
+    delMember(process.argv[3], process.argv[4]);
+  } else { help(); }
+} else if (process.argv[2] === 'listUsers') {
   listUsers();
-else if (process.argv[2] === 'listGroups')
+} else if (process.argv[2] === 'listGroups') {
   listGroups();
-else if (process.argv[2] === 'showGroupsOfUser')
-  showGroupsOfUser(process.argv[3]);
-else if (process.argv[2] === 'showMembers')
-  showMembers(process.argv[3]);
-else if (process.argv[2] === 'showUserPermission')
-  showUserPermission(process.argv[3]);
-else if (process.argv[2] === 'showGroupPermission')
-  showGroupPermission(process.argv[3]);
-else if (process.argv[2] === 'editUserPermission')
-  editUserPermission(process.argv[3]);
-else if (process.argv[2] === 'editGroupPermission')
-  editGroupPermission(process.argv[3]);
-else
+} else if (process.argv[2] === 'showGroupsOfUser') {
+  if(process.argv[3]) {
+    showGroupsOfUser(process.argv[3]);
+  } else { help(); }
+} else if (process.argv[2] === 'showMembers') {
+  if(process.argv[3]) {
+    showMembers(process.argv[3]);
+  } else { help(); }
+} else if (process.argv[2] === 'showUserPermission') {
+  if(process.argv[3]) {
+    showUserPermission(process.argv[3]);
+  } else { help(); }
+} else if (process.argv[2] === 'showGroupPermission') {
+  if(process.argv[3]) {
+    showGroupPermission(process.argv[3]);
+  } else { help(); }
+} else if (process.argv[2] === 'editUserPermission') {
+  if(process.argv[3] && process.argv[4]) {
+    editUserPermission(process.argv[3], process.argv[4]);
+  } else { help(); }
+} else if (process.argv[2] === 'editGroupPermission') {
+  if(process.argv[3] && process.argv[4]) {
+    editGroupPermission(process.argv[3], process.argv[4]);
+  } else { help(); }
+}
+else {
   help();
+}
 
 
 function help() {
@@ -71,33 +100,72 @@ function help() {
 }
 
 function addUser(userName: string) {
-  // TODO
+  db.all('SELECT name FROM users WHERE name = ?', userName, function(err, rows) {
+    if (err) {
+      console.log('Error:', err);
+    } else if(rows.length !== 0) {
+      console.log('user', userName, 'is already exists');
+    } else {
+      let rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+      });
+
+      rl.question('Enter password: ', function(password) {
+        db.run('INSERT INTO users (name, password) VALUES (?, ?)', userName, password);
+        rl.close();
+      });
+    }
+  });
 }
 
 function addGroup(groupName: string) {
-  // TODO
+  db.all('SELECT name FROM groups WHERE name = ?', groupName, function(err, rows) {
+    if (err) {
+      console.log('Error:', err);
+    } else if(rows.length !== 0) {
+      console.log('group', groupName, 'is already exists');
+    } else {
+      db.run('INSERT INTO groups (name) VALUES (?)', groupName);
+    }
+  });
 }
 
 function delUser(userName: string) {
-  // TODO
+  db.run('DELETE FROM users WHERE name = ?', userName);
 }
 
 function delGroup(groupName: string) {
-  // TODO
+  db.run('DELETE FROM groups WHERE name = ?', groupName);
 }
 
 function addMember(userName: string, groupName: string) {
-  // TODO
+  db.run(
+    `INSERT INTO groupMembers (userId, groupId) VALUES (
+     (SELECT id FROM users  WHERE name = ?),
+     (SELECT id FROM groups WHERE name = ?)
+     )`,
+    userName, groupName, function(err: any) {
+      if(err) console.log('Error: ', err);
+    }
+  );
 }
 
 function delMember(userName: string, groupName: string) {
-  // TODO
+  db.run(
+    `DELETE FROM groupMembers WHERE
+     userId  = (SELECT id FROM users  WHERE name = ?) AND
+     groupId = (SELECT id FROM groups WHERE name = ?)`,
+    userName, groupName, function(err: any) {
+      if(err) console.log('Error: ', err);
+    }
+  );
 }
 
 function listUsers() {
-  db.each('SELECT * FROM users', function(err, row) {
+  db.each('SELECT name FROM users', function(err, row) {
     if (err) {
-      console.log('Error: ' + err);
+      if (err) throw err;
       return;
     }
     console.log(row.name);
@@ -105,29 +173,73 @@ function listUsers() {
 }
 
 function listGroups() {
-  // TODO
+  db.each('SELECT name FROM groups', function(err, row) {
+    if (err) {
+      if (err) throw err;
+      return;
+    }
+    console.log(row.name);
+  });
 }
 
 function showGroupsOfUser(userName: string) {
-  // TODO
+  db.each('SELECT groups.name AS name FROM users, groups groupMembers WHERE users.name = ?', userName, function(err, row) {
+    if (err) {
+      if (err) throw err;
+      return;
+    }
+    console.log(row.name);
+  });
 }
 
 function showMembers(groupName: string) {
-  // TODO
+  db.each('SELECT users.name AS name FROM users, groups, groupMembers WHERE groups.name = ?', groupName, function(err, row) {
+    if (err) {
+      if (err) throw err;
+      return;
+    }
+    console.log(row.name);
+  });
 }
 
 function showUserPermission(userName: string) {
-  // TODO
+  db.all('SELECT permission FROM users WHERE name = ?', userName, function(err, rows) {
+    if (err) {
+      if (err) throw err;
+      return;
+    }
+    if (rows.length === 0)
+      console.log('no such user');
+    else
+      console.log(rows[0].permission);
+  });
 }
 
 function showGroupPermission(groupName: string) {
-  // TODO
+  db.all('SELECT permission FROM groups WHERE name = ?', groupName, function(err, rows) {
+    if (err) {
+      if (err) throw err;
+      return;
+    }
+    if (rows.length === 0)
+      console.log('no such group');
+    else
+      console.log(rows[0].permission);
+  });
 }
 
-function editUserPermission(userName: string) {
-  // TODO
+function editUserPermission(userName: string, permissionFile: string) {
+  fs.readFile(permissionFile, function(err, data) {
+    db.run('UPDATE users SET permission = ? WHERE name = ?', data, userName, function(err: any) {
+      if (err) throw err;
+    })
+  });
 }
 
-function editGroupPermission(groupName: string) {
-  // TODO
+function editGroupPermission(groupName: string, permissionFile: string) {
+  fs.readFile(permissionFile, function(err, data) {
+    db.run('UPDATE groups SET permission = ? WHERE name = ?', data, groupName, function(err: any) {
+      if (err) throw err;
+    })
+  });
 }
