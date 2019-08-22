@@ -211,7 +211,7 @@ function showUserPermission(userName: string) {
     if (rows.length === 0)
       console.log('no such user');
     else
-      console.log(rows[0].permission);
+      console.log(rows[0].permission.toString());
   });
 }
 
@@ -224,7 +224,7 @@ function showGroupPermission(groupName: string) {
     if (rows.length === 0)
       console.log('no such group');
     else
-      console.log(rows[0].permission);
+      console.log(rows[0].permission.toString());
   });
 }
 

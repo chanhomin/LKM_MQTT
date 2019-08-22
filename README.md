@@ -45,3 +45,8 @@ manage editUserPermission <userName>
 # edit group's permission
 manage editGroupPermission <groupName>
 ```
+
+### format of permission description
+```
+<allow|disallow> <all|publish|subscribe> <topic>
+```
