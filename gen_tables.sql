@@ -1,0 +1,20 @@
+CREATE TABLE users (
+	id         INTEGER PRIMARY KEY AUTOINCREMENT,
+	name       TEXT NOT NULL UNIQUE,
+	password   TEXT NOT NULL,
+	permission TEXT NOT NULL DEFAULT ''
+);
+
+CREATE TABLE groups (
+	id         INTEGER PRIMARY KEY AUTOINCREMENT,
+	name       TEXT NOT NULL UNIQUE,
+	permission TEXT NOT NULL DEFAULT ''
+);
+
+CREATE TABLE groupMembers (
+	userId  INTEGER NOT NULL,
+	groupId INTEGER NOT NULL,
+	PRIMARY KEY (userId, groupId),
+	FOREIGN KEY (userId)  REFERENCES users  (id) ON DELETE CASCADE,
+	FOREIGN KEY (groupId) REFERENCES groups (id) ON DELETE CASCADE
+);
